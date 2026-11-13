@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" width="760" height="420" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#57606a"/>
+    </marker>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0969da"/>
+    </marker>
+  </defs>
+  <rect width="760" height="420" rx="8" fill="#ffffff"/>
+
+  <!-- ================= model ================= -->
+  <text x="20" y="26" font-size="12" font-weight="600" fill="#57606a" letter-spacing="0.4">MODEL</text>
+
+  <g font-size="14" font-weight="600" text-anchor="middle" fill="#1f2328">
+    <rect x="20" y="42" width="200" height="58" rx="7" fill="#f6f8fa" stroke="#57606a" stroke-width="1.2"/>
+    <text x="120" y="66">Layer l</text>
+    <rect x="316" y="42" width="128" height="58" rx="7" fill="#ddf4ff" stroke="#0969da" stroke-width="1.2"/>
+    <text x="380" y="66">Rescale</text>
+    <rect x="540" y="42" width="200" height="58" rx="7" fill="#f6f8fa" stroke="#57606a" stroke-width="1.2"/>
+    <text x="640" y="66">Layer l + 1</text>
+  </g>
+  <g font-size="11.5" text-anchor="middle" fill="#57606a">
+    <text x="120" y="86">frozen weights + adapters θ</text>
+    <text x="380" y="86">h × (1 + f)</text>
+    <text x="640" y="86">frozen weights + adapters θ</text>
+  </g>
+  <g fill="none" stroke="#57606a" stroke-width="1.3">
+    <path d="M220,71 H314" marker-end="url(#g)"/>
+    <path d="M444,71 H538" marker-end="url(#g)"/>
+  </g>
+  <g font-size="11.5" text-anchor="middle" fill="#57606a">
+    <text x="267" y="63">output h</text>
+    <text x="491" y="63">rescaled</text>
+  </g>
+
+  <!-- modulator -->
+  <rect x="230" y="140" width="300" height="62" rx="7" fill="#ddf4ff" stroke="#0969da" stroke-width="1.2"/>
+  <text x="380" y="165" font-size="14" font-weight="600" text-anchor="middle" fill="#1f2328">Modulator φ</text>
+  <text x="380" y="185" font-size="11.5" text-anchor="middle" fill="#57606a">one shared vector, a small low-rank map per layer</text>
+  <path d="M380,140 V102" fill="none" stroke="#0969da" stroke-width="1.3" marker-end="url(#b)"/>
+  <text x="388" y="125" font-size="11.5" fill="#0969da">factor f, one entry per hidden dimension</text>
+
+  <!-- ================= training ================= -->
+  <text x="20" y="246" font-size="12" font-weight="600" fill="#57606a" letter-spacing="0.4">TRAINING</text>
+
+  <rect x="20" y="260" width="330" height="112" rx="7" fill="#f6f8fa" stroke="#57606a" stroke-width="1.2"/>
+  <text x="185" y="284" font-size="14" font-weight="600" text-anchor="middle" fill="#1f2328">Inner loop, every step</text>
+  <g font-size="12" text-anchor="middle" fill="#57606a">
+    <text x="185" y="308">task batch, some of it harmful</text>
+    <text x="185" y="328">modulator switched off</text>
+    <text x="185" y="348">update adapters θ on the task loss</text>
+  </g>
+
+  <rect x="410" y="260" width="330" height="112" rx="7" fill="#ddf4ff" stroke="#0969da" stroke-width="1.2"/>
+  <text x="575" y="284" font-size="14" font-weight="600" text-anchor="middle" fill="#1f2328">Outer loop, every K steps</text>
+  <g font-size="12" text-anchor="middle" fill="#57606a">
+    <text x="575" y="308">safety batch and task batch</text>
+    <text x="575" y="328">modulator switched on, θ held fixed</text>
+    <text x="575" y="348">update φ on safety loss + task loss + size of f</text>
+  </g>
+
+  <path d="M350,316 H408" fill="none" stroke="#57606a" stroke-width="1.3" marker-end="url(#g)"/>
+  <text x="379" y="308" font-size="11.5" text-anchor="middle" fill="#57606a">θ</text>
+
+  <text x="380" y="400" font-size="12" text-anchor="middle" fill="#57606a">After training, the adapters θ and the modulator φ are both kept.</text>
+</svg>

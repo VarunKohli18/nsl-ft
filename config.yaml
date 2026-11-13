@@ -1,0 +1,34 @@
+# Model: what gets fine-tuned.
+model: gemma-4-e4b           # gemma-4-e4b | any Hugging Face model ID
+mode: lora                   # lora (train small adapters) | full (train the weights themselves)
+train_layers: all            # all | a number N (only the last N layers are trained)
+
+# Data: the fine-tuning task, and how much of it is harmful.
+dataset: sst2                # sst2 (sentiment) | commonsense | path to your own JSONL file of {"prompt", "response"} rows
+poison_ratio: 0.1            # 0 to 1: share of training examples that are harmful
+train_samples: 15000         # any number of training examples
+
+# Inner loop: the model learns the task.
+lr: 0.0001                   # learning rate: any number, or null (recommended 1e-4 for lora, 1e-5 for full)
+gamma: 0                     # pull back to the starting weights: 0 (off) or any positive number
+steps: 1000                  # any number of training steps
+seed: 42                     # any integer
+
+# Outer loop: the modulator learns to keep the model safe.
+modulator: on                # on | off (off: ordinary fine-tuning, inner loop only)
+inner_steps: 10              # training steps between modulator updates: any number
+outer_schedule: nested       # nested (modulator steps interleaved with training) | after (the same number of steps, taken once training is done)
+outer_lr: 0.01               # learning rate of the modulator: any number
+lambda_task: 1.0             # weight of the task loss in the modulator's objective: 0 (off) or any positive number
+mu: 0.01                     # penalty on the size of the modulation: 0 (off) or any positive number
+rank: 8                      # size of the modulator per layer: any number
+
+# Safety data: what the modulator is trained on.
+safety_data: own_replies     # own_replies (harmful requests from BeaverTails with the model's own replies before training) | harmless_chats (Anthropic HH-RLHF conversations)
+
+# Eval: what is measured after training.
+eval: quick                  # quick (100 prompts per benchmark) | full (500) | none
+judge: cais/HarmBench-Llama-2-13b-cls   # the model that decides whether a reply is harmful: a HarmBench classifier from Hugging Face
+
+# Output: where results are written.
+output_dir: results          # any folder

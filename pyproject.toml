@@ -1,0 +1,22 @@
+[project]
+name = "nsl-ft"
+version = "0.1.0"
+description = "NSL-FT: nested safety learning, a safety modulator trained in an outer loop while the model fine-tunes"
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.0",
+    "transformers>=4.56",
+    "accelerate",
+    "peft>=0.10",
+    "datasets",
+    "sentencepiece",
+    "protobuf",
+    "pyyaml",
+]
+
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
